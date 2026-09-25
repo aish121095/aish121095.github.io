@@ -571,13 +571,13 @@ function PublicationsPage() {
           <SectionHeading title="Selected Publications" />
           <div className="grid grid-cols-1 gap-6 max-w-4xl">
             {[
-              { title: "Low-sodium salt substitutes as a key intervention for prevention, control & management of hypertension and other cardiovascular diseases in India: A White Paper", journal: "Zenodo", year: "2026", link: "https://doi.org/10.5281/zenodo.22669373" },
-              { title: {
+              {
   title: "Low-sodium salt substitutes as a key intervention for prevention, control & management of hypertension and other cardiovascular diseases in India: A White Paper",
   journal: "Zenodo",
   year: "2026"
 },
-                "Peer Education Initiatives for Promoting Adolescent Health in SEAR", journal: "AJPM Focus", year: "2025" },
+{ title: "Peer Education Initiatives for Promoting Adolescent Health in SEAR", journal: "AJPM Focus", year: "2025" },
+{ title: "Epidemiological Trends of Diabetes Mellitus and HIV and Their Effect on Tuberculosis Outcomes", journal: "Cureus", year: "2025" },
               { title: "Epidemiological Trends of Diabetes Mellitus and HIV and Their Effect on Tuberculosis Outcomes", journal: "Cureus", year: "2025" },
               { title: "Awareness and Usage of Digital Tools for Cessation of Smoking among College-Going Smokers in Ernakulam, Kerala", journal: "Global Journal of Medicine and Public Health", year: "2025" },
               { title: "Menstrual Health and Hygiene Practices of Adolescent Girls in South India", journal: "", year: "2024" },
