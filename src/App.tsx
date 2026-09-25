@@ -571,6 +571,7 @@ function PublicationsPage() {
           <SectionHeading title="Selected Publications" />
           <div className="grid grid-cols-1 gap-6 max-w-4xl">
             {[
+              { title: "Low-sodium salt substitutes as a key intervention for prevention, control & management of hypertension and other cardiovascular diseases in India: A White Paper", journal: "Zenodo", year: "2026", link: "https://doi.org/10.5281/zenodo.22669373" },
               { title: "Peer Education Initiatives for Promoting Adolescent Health in SEAR", journal: "AJPM Focus", year: "2025" },
               { title: "Epidemiological Trends of Diabetes Mellitus and HIV and Their Effect on Tuberculosis Outcomes", journal: "Cureus", year: "2025" },
               { title: "Awareness and Usage of Digital Tools for Cessation of Smoking among College-Going Smokers in Ernakulam, Kerala", journal: "Global Journal of Medicine and Public Health", year: "2025" },
@@ -587,7 +588,13 @@ function PublicationsPage() {
                 className="p-6 bg-white rounded-xl shadow-sm border-l-4 border-accent hover:border-primary transition-colors duration-300 group"
               >
                 <h3 className="text-xl font-serif font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                  "{pub.title}"
+                  {pub.link ? (
+                    <a href={pub.link} target="_blank" rel="noopener noreferrer" className="underline decoration-primary/30 underline-offset-4 hover:decoration-primary">
+                      "{pub.title}"
+                    </a>
+                  ) : (
+                    <>"{pub.title}"</>
+                  )}
                 </h3>
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   {pub.journal && <span className="font-medium">{pub.journal}</span>}
