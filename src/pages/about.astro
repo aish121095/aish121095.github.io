@@ -9,7 +9,7 @@ import SectionHeading from "@/components/SectionHeading.astro";
 const about = await getEntry("about", "about");
 if (!about) throw new Error("Missing src/content/pages/about.md");
 const { Content } = await render(about);
-const { title, photo, photoAlt, expertise, expertiseHeading } = about.data;
+const { title, photo, photoAlt, expertise, expertiseHeading, languages, languagesHeading } = about.data;
 ---
 
 <BaseLayout title={title}>
@@ -43,6 +43,20 @@ const { title, photo, photoAlt, expertise, expertiseHeading } = about.data;
                   {expertise.map((skill) => (
                     <li class="px-4 py-2 bg-background border border-border rounded-full text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">
                       {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+          {
+            languages.length > 0 && (
+              <div class="mt-8">
+                <h2 class="font-serif text-xl font-semibold mb-4 text-foreground">{languagesHeading}</h2>
+                <ul class="flex flex-wrap gap-2" role="list">
+                  {languages.map((language) => (
+                    <li class="px-4 py-2 bg-secondary/40 border border-secondary rounded-full text-sm font-medium text-secondary-foreground">
+                      {language}
                     </li>
                   ))}
                 </ul>

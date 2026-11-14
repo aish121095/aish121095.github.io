@@ -1,5 +1,6 @@
 ---
 title: "Good Clinical Practice"
 category: Certification
-order: 5
+issuer: "NIDA Clinical Trials Network"
+order: 16
 ---

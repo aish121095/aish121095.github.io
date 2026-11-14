@@ -46,6 +46,8 @@ const about = defineCollection({
     photoAlt: optionalString,
     expertiseHeading: z.string().default("Core Expertise"),
     expertise: stringList,
+    languagesHeading: z.string().default("Languages"),
+    languages: stringList,
   }),
 });
 
@@ -121,6 +123,7 @@ const awards = defineCollection({
     title: z.string(),
     category: z.enum(["Award", "Certification", "Training"]).default("Certification"),
     issuer: optionalString,
+    description: optionalString,
     year: z.coerce.number().int().nullish(),
     order: z.number().nullish(),
   }),

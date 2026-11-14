@@ -117,6 +117,8 @@ const about: Collection = {
     { type: "string", name: "photoAlt", label: "Photo description (for screen readers)" },
     { type: "string", name: "expertiseHeading", label: "Expertise heading" },
     { type: "string", name: "expertise", label: "Areas of expertise", list: true },
+    { type: "string", name: "languagesHeading", label: "Languages heading" },
+    { type: "string", name: "languages", label: "Languages", list: true, description: "e.g. Japanese (JLPT N5)" },
     { type: "rich-text", name: "body", label: "Biography", isBody: true },
   ],
 };
@@ -256,8 +258,15 @@ const awards: Collection = {
   defaultItem: () => ({ category: "Certification" }),
   fields: [
     { type: "string", name: "title", label: "Title", required: true, isTitle: true },
-    { type: "string", name: "category", label: "Category", options: ["Award", "Certification", "Training"] },
-    { type: "string", name: "issuer", label: "Awarded by" },
+    {
+      type: "string",
+      name: "category",
+      label: "Category",
+      description: "Awards appear under “Awards & Achievements”; certifications and training under “Courses & Certifications”.",
+      options: ["Award", "Certification", "Training"],
+    },
+    { type: "string", name: "issuer", label: "Awarded by / provider" },
+    { type: "string", name: "description", label: "Details (optional)", ui: { component: "textarea" } },
     { type: "number", name: "year", label: "Year" },
     orderField,
   ],

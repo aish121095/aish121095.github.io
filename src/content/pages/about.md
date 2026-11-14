@@ -12,7 +12,21 @@ expertise:
   - Nutrition
   - Implementation Research
   - Qualitative Research
+  - Quantitative Analysis
+  - Statistical Analysis
+  - Literature Review
+  - Data Management
   - Project Management
+  - MS Office
+languagesHeading: Languages
+languages:
+  - English
+  - Hindi
+  - Tamil
+  - Malayalam
+  - Marathi
+  - Gujarati (elementary reading)
+  - Japanese (JLPT N5)
 ---
 
 I am a Public Health Researcher and Dentist with experience in qualitative and quantitative research, implementation science, policy development, scientific writing and project coordination.

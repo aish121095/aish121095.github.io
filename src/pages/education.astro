@@ -18,8 +18,12 @@ const degrees = await Promise.all(
     Content: (await render(entry)).Content,
   })),
 );
-const awards = await getAwards();
+const allAwards = await getAwards();
 const categoryIcon = { Award, Certification: BadgeCheck, Training: BookOpen } as const;
+const groups = [
+  { title: "Awards & Achievements", items: allAwards.filter((a) => a.data.category === "Award") },
+  { title: "Courses & Certifications", items: allAwards.filter((a) => a.data.category !== "Award") },
+].filter((g) => g.items.length > 0);
 ---
 
 <BaseLayout title="Education" description="Academic qualifications in public health and dental surgery, with awards and professional certifications.">
@@ -61,19 +65,22 @@ const categoryIcon = { Award, Certification: BadgeCheck, Training: BookOpen } as
       </ul>
 
       {
-        awards.length > 0 && (
-          <>
-            <SectionHeading title="Awards & Certifications" as="h2" />
+        groups.map((group, g) => (
+          <div class:list={[{ "mb-16": g < groups.length - 1 }]}>
+            <SectionHeading title={group.title} as="h2" />
             <ul class="flex flex-wrap gap-4" role="list">
-              {awards.map(({ data }, i) => {
+              {group.items.map(({ data }, i) => {
                 const Icon = categoryIcon[data.category];
                 return (
                   <li
                     data-reveal="zoom"
-                    style={`--delay:${i * 0.05}s`}
-                    class="flex items-center gap-3 px-6 py-3 bg-background border border-secondary text-foreground rounded-lg shadow-sm hover:border-primary hover:shadow-md transition-all"
+                    style={`--delay:${Math.min(i, 10) * 0.05}s`}
+                    class:list={[
+                      "flex items-start gap-3 px-6 py-3 bg-background border border-secondary text-foreground rounded-lg shadow-sm hover:border-primary hover:shadow-md transition-all",
+                      { "max-w-xl": data.description },
+                    ]}
                   >
-                    <Icon size={18} class="text-primary shrink-0" aria-label={data.category} />
+                    <Icon size={18} class="text-primary shrink-0 mt-0.5" aria-label={data.category} />
                     <span>
                       <span class="font-medium">{data.title}</span>
                       {(data.issuer || data.year) && (
@@ -81,13 +88,16 @@ const categoryIcon = { Award, Certification: BadgeCheck, Training: BookOpen } as
                           {[data.issuer, data.year].filter(Boolean).join(" · ")}
                         </span>
                       )}
+                      {data.description && (
+                        <span class="block text-sm text-muted-foreground mt-1">{data.description}</span>
+                      )}
                     </span>
                   </li>
                 );
               })}
             </ul>
-          </>
-        )
+          </div>
+        ))
       }
     </div>
   </section>

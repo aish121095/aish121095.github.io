@@ -1,5 +1,6 @@
 ---
-title: "Research Grant Writing"
+title: "Research Grant Writing and Implementing a Grant Project"
 category: Training
-order: 4
+issuer: "ILBS"
+order: 12
 ---

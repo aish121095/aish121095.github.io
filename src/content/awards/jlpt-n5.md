@@ -1,5 +1,6 @@
 ---
 title: "JLPT N5"
 category: Certification
-order: 6
+issuer: "Japan Foundation"
+order: 17
 ---
