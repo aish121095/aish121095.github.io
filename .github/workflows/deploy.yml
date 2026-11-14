@@ -1,7 +1,24 @@
+# Builds the Astro site (plus the TinaCMS admin at /admin) and publishes it to
+# GitHub Pages.
+#
+# One-time setup:
+#   1. Settings → Pages → Build and deployment → Source = "GitHub Actions".
+#      (If it says "Deploy from a branch", GitHub publishes the raw source and
+#      the site breaks.)
+#   2. For the CMS: create a project at https://app.tina.io linked to this
+#      repo, then add in Settings → Secrets and variables → Actions:
+#        - variable  TINA_CLIENT_ID  (the project's Client ID)
+#        - secret    TINA_TOKEN      (a read-only content token)
+#      Without these the site still deploys, just without /admin.
+#
+# Edits saved in the CMS are committed to main by Tina Cloud, which triggers
+# this workflow and republishes the site within a couple of minutes.
 name: Deploy to GitHub Pages
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -11,36 +28,50 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      TINA_CLIENT_ID: ${{ vars.TINA_CLIENT_ID || secrets.TINA_CLIENT_ID }}
+      TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
-      - name: Build
-        run: npm run build
+      - name: Build site
+        run: |
+          if [ -n "$TINA_CLIENT_ID" ] && [ -n "$TINA_TOKEN" ]; then
+            echo "Building site with TinaCMS admin"
+            npx tinacms build --noTelemetry
+          else
+            echo "::warning title=CMS not configured::TINA_CLIENT_ID / TINA_TOKEN are not set, so /admin will not be published. The site itself still deploys."
+          fi
+          npm run build
 
-      - name: Disable Jekyll
+      - name: Prepare Pages output
         run: touch dist/.nojekyll
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
+        if: github.event_name != 'pull_request'
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request'
         with:
           path: dist
 
   deploy:
+    # Pull requests only run the build as a check; deploy on main only
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
@@ -48,4 +79,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

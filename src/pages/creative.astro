@@ -1,0 +1,191 @@
+---
+import { getEntry } from "astro:content";
+import X from "@lucide/astro/icons/x";
+import ChevronLeft from "@lucide/astro/icons/chevron-left";
+import ChevronRight from "@lucide/astro/icons/chevron-right";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import JaliBorder from "@/components/JaliBorder.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+
+const entry = await getEntry("creative", "creative");
+if (!entry) throw new Error("Missing src/content/pages/creative.json");
+const { title, subtitle, pillars, quote, galleries } = entry.data;
+---
+
+<BaseLayout title="Creative" description={subtitle}>
+  <section class="pt-32 pb-20 bg-background relative overflow-hidden min-h-screen">
+    <MandalaMotif spin class="z-0" style="top:50%;left:50%;width:520px;height:520px;opacity:0.055;transform:translate(-50%,-50%)" />
+    <MandalaMotif class="z-0" style="top:-100px;left:-100px;width:280px;height:280px;opacity:0.04" />
+    <PaisleyMotif class="text-primary z-0" style="bottom:10%;right:2%;width:60px;height:96px;opacity:0.06" />
+    <PaisleyMotif class="text-accent z-0" style="bottom:5%;right:8%;width:46px;height:74px;opacity:0.05;transform:scaleX(-1)" />
+
+    <div class="container mx-auto px-6 relative z-10">
+      <SectionHeading title={title} subtitle={subtitle} />
+
+      {
+        pillars.length > 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            {pillars.map((pillar, i) => (
+              <div data-reveal="zoom" style={`--delay:${i * 0.1}s`}>
+                <div class="lift h-full p-8 bg-white/80 backdrop-blur-sm rounded-2xl border border-border shadow-sm">
+                  <h2 class="text-2xl font-serif font-bold text-primary mb-4">{pillar.title}</h2>
+                  <p class="text-muted-foreground leading-relaxed whitespace-pre-line">{pillar.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        quote && (
+          <figure class="max-w-3xl mx-auto text-center mb-20" data-reveal="up-sm">
+            <blockquote class="text-2xl md:text-3xl font-serif italic text-foreground leading-relaxed relative">
+              <span class="text-6xl text-primary/20 absolute -top-8 -left-8" aria-hidden="true">“</span>
+              {quote}
+              <span class="text-6xl text-primary/20 absolute -bottom-12 -right-4" aria-hidden="true">”</span>
+            </blockquote>
+          </figure>
+        )
+      }
+
+      {
+        galleries.map((gallery, g) => (
+          <div class:list={[{ "mb-16": g < galleries.length - 1 }]}>
+            <h2 class:list={["text-3xl font-serif font-semibold text-primary text-center", gallery.caption ? "mb-3" : "mb-8"]}>
+              {gallery.title}
+            </h2>
+            {gallery.caption && <p class="text-center text-muted-foreground mb-8 font-light">{gallery.caption}</p>}
+            <ul
+              role="list"
+              class:list={[
+                gallery.layout === "grid"
+                  ? "grid grid-cols-2 md:grid-cols-4 gap-4"
+                  : "columns-2 md:columns-3 lg:columns-4 gap-4",
+              ]}
+            >
+              {gallery.images.map((img, i) => (
+                <li
+                  data-reveal={gallery.layout === "grid" ? "zoom" : "up-sm"}
+                  style={`--delay:${Math.min(i, 8) * 0.08}s`}
+                  class:list={[gallery.layout === "grid" ? "aspect-[3/4]" : "break-inside-avoid mb-4"]}
+                >
+                  <button
+                    type="button"
+                    class="lightbox-trigger block w-full h-full overflow-hidden rounded-2xl shadow-md border border-border hover:shadow-xl hover:border-primary/40 transition-all duration-300 group cursor-zoom-in"
+                    data-gallery={g}
+                    data-index={i}
+                    data-src={img.src}
+                    data-alt={img.alt}
+                    aria-label={`View larger: ${img.alt || `photo ${i + 1}`}`}
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      loading="lazy"
+                      decoding="async"
+                      class:list={[
+                        "w-full object-cover group-hover:scale-105 transition-transform duration-500",
+                        { "h-full": gallery.layout === "grid" },
+                      ]}
+                    />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  <JaliBorder id="creative-bottom" class="text-primary/25" />
+
+  <dialog
+    id="lightbox"
+    aria-label="Photo viewer"
+    class="fixed inset-0 m-0 w-full h-full max-w-none max-h-none bg-black/90 backdrop-blur-sm p-0 open:flex items-center justify-center backdrop:bg-transparent"
+  >
+    <button
+      type="button"
+      data-action="close"
+      class="absolute top-5 right-5 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors z-10"
+      aria-label="Close"
+    >
+      <X size={22} aria-hidden="true" />
+    </button>
+    <button
+      type="button"
+      data-action="prev"
+      class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors z-10"
+      aria-label="Previous photo"
+    >
+      <ChevronLeft size={26} aria-hidden="true" />
+    </button>
+    <button
+      type="button"
+      data-action="next"
+      class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors z-10"
+      aria-label="Next photo"
+    >
+      <ChevronRight size={26} aria-hidden="true" />
+    </button>
+    <figure class="relative max-w-[88vw] max-h-[88vh] flex flex-col items-center">
+      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[80vh] rounded-xl shadow-2xl object-contain" />
+      <figcaption id="lightbox-caption" class="mt-4 text-white/75 text-sm font-light tracking-wide text-center"></figcaption>
+      <p id="lightbox-count" class="mt-1 text-white/40 text-xs" aria-live="polite"></p>
+    </figure>
+  </dialog>
+</BaseLayout>
+
+<script>
+  const dialog = document.getElementById("lightbox") as HTMLDialogElement;
+  const imgEl = document.getElementById("lightbox-img") as HTMLImageElement;
+  const caption = document.getElementById("lightbox-caption")!;
+  const count = document.getElementById("lightbox-count")!;
+  const triggers = [...document.querySelectorAll<HTMLButtonElement>(".lightbox-trigger")];
+
+  let current: HTMLButtonElement[] = [];
+  let index = 0;
+
+  const show = () => {
+    const t = current[index];
+    imgEl.src = t.dataset.src ?? "";
+    imgEl.alt = t.dataset.alt ?? "";
+    caption.textContent = t.dataset.alt ?? "";
+    count.textContent = current.length > 1 ? `${index + 1} / ${current.length}` : "";
+    dialog.querySelectorAll<HTMLElement>("[data-action=prev],[data-action=next]").forEach((b) => {
+      b.hidden = current.length < 2;
+    });
+  };
+  const step = (delta: number) => {
+    index = (index + delta + current.length) % current.length;
+    show();
+  };
+
+  triggers.forEach((t) =>
+    t.addEventListener("click", () => {
+      current = triggers.filter((x) => x.dataset.gallery === t.dataset.gallery);
+      index = Number(t.dataset.index);
+      show();
+      dialog.showModal();
+      document.body.style.overflow = "hidden";
+    }),
+  );
+
+  dialog.addEventListener("close", () => {
+    document.body.style.overflow = "";
+  });
+  dialog.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const action = target.closest<HTMLElement>("[data-action]")?.dataset.action;
+    if (action === "prev") step(-1);
+    else if (action === "next") step(1);
+    else if (action === "close" || target === dialog || target.tagName === "FIGURE") dialog.close();
+  });
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") step(-1);
+    if (e.key === "ArrowRight") step(1);
+  });
+</script>

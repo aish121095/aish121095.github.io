@@ -1,0 +1,57 @@
+---
+import { getEntry, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import JaliBorder from "@/components/JaliBorder.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+
+const about = await getEntry("about", "about");
+if (!about) throw new Error("Missing src/content/pages/about.md");
+const { Content } = await render(about);
+const { title, photo, photoAlt, expertise, expertiseHeading } = about.data;
+---
+
+<BaseLayout title={title}>
+  <section class="pt-32 pb-20 bg-white relative overflow-hidden min-h-screen">
+    <MandalaMotif style="top:-80px;right:-80px;width:340px;height:340px;opacity:0.05" />
+    <PaisleyMotif class="text-accent" style="bottom:10%;left:1%;width:55px;height:90px;opacity:0.06;transform:rotate(-20deg)" />
+    <PaisleyMotif class="text-primary" style="bottom:5%;left:5%;width:45px;height:72px;opacity:0.05;transform:scaleX(-1) rotate(-10deg)" />
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row gap-16 items-start">
+        {
+          photo && (
+            <div class="md:w-1/3 w-full flex justify-center md:justify-end" data-reveal="up">
+              <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-white shadow-xl shrink-0">
+                <img src={photo} alt={photoAlt ?? ""} class="w-full h-full object-cover object-top" width="256" height="256" />
+              </div>
+            </div>
+          )
+        }
+        <div class="md:w-2/3" data-reveal="up" style="--delay:0.1s">
+          <SectionHeading title={title} />
+          <div
+            class="prose prose-lg max-w-none mb-8 prose-p:text-lg prose-p:text-foreground/80 prose-p:leading-relaxed prose-a:text-primary prose-strong:text-foreground prose-headings:font-serif"
+          >
+            <Content />
+          </div>
+          {
+            expertise.length > 0 && (
+              <div class="mt-8">
+                <h2 class="font-serif text-xl font-semibold mb-4 text-foreground">{expertiseHeading}</h2>
+                <ul class="flex flex-wrap gap-2" role="list">
+                  {expertise.map((skill) => (
+                    <li class="px-4 py-2 bg-background border border-border rounded-full text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+  <JaliBorder id="about-bottom" class="text-accent/30" />
+</BaseLayout>

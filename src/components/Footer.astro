@@ -1,0 +1,15 @@
+---
+interface Props {
+  name: string;
+  motto?: string;
+}
+const { name, motto } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="py-8 bg-foreground text-background text-center">
+  <div class="container mx-auto px-6">
+    {motto && <p class="font-serif text-lg text-primary/80 mb-2">{motto}</p>}
+    <p class="text-sm text-background/60">© {year} {name}</p>
+  </div>
+</footer>

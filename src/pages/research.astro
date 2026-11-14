@@ -1,0 +1,41 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import JaliBorder from "@/components/JaliBorder.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import ResearchIcon from "@/components/ResearchIcon.astro";
+import { getResearch } from "@/lib/content";
+
+const interests = await getResearch();
+---
+
+<BaseLayout title="Research Interests" description="Research interests spanning tobacco control, digital health, nutrition and implementation science.">
+  <section class="pt-32 pb-20 bg-white relative overflow-hidden min-h-screen">
+    <MandalaMotif spin style="top:50%;left:50%;width:620px;height:620px;opacity:0.055;transform:translate(-50%,-50%)" />
+    <MandalaMotif style="bottom:-120px;left:-120px;width:380px;height:380px;opacity:0.055" />
+    <PaisleyMotif class="text-accent" style="top:8%;right:2%;width:55px;height:90px;opacity:0.06;transform:rotate(-30deg)" />
+    <PaisleyMotif class="text-primary" style="top:5%;right:7%;width:42px;height:68px;opacity:0.05;transform:scaleX(-1) rotate(-15deg)" />
+    <div class="container mx-auto px-6 relative z-10">
+      <SectionHeading title="Research Interests" />
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
+        {
+          interests.map(({ data }, i) => (
+            <li data-reveal="up-sm" style={`--delay:${i * 0.1}s`}>
+              <div class="lift h-full p-8 rounded-2xl bg-background border border-border hover:border-primary/50 shadow-sm hover:shadow-md group">
+                <div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <ResearchIcon name={data.icon} />
+                </div>
+                <h2 class="text-xl font-serif font-semibold text-foreground group-hover:text-primary transition-colors">
+                  {data.title}
+                </h2>
+                {data.summary && <p class="mt-3 text-muted-foreground leading-relaxed">{data.summary}</p>}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+  <JaliBorder id="research-bottom" class="text-accent/30" />
+</BaseLayout>
