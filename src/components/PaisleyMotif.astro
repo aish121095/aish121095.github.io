@@ -1,0 +1,27 @@
+---
+interface Props {
+  class?: string;
+  style?: string;
+}
+const { class: className = "", style = "" } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 160 260"
+  class:list={["absolute pointer-events-none select-none", className]}
+  style={style}
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <path
+    d="M80 245 C48 210,25 155,32 100 C39 45,72 12,105 12 C138 12,158 40,158 72 C158 104,138 130,114 140 C94 150,86 142,96 128 C106 114,126 110,128 90 C130 70,114 50,96 50 C78 50,62 70,60 98 C57 133,74 175,80 218 C83 235,82 250,80 245 Z"
+    fill="currentColor"
+    fill-opacity="0.3"
+    stroke="currentColor"
+    stroke-width="1.5"></path>
+  <path d="M80 225 C54 196,38 152,45 106 C52 62,77 36,103 38" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"></path>
+  <circle cx="88" cy="78" r="4" fill="currentColor"></circle>
+  <circle cx="75" cy="96" r="2.5" fill="currentColor"></circle>
+  <circle cx="99" cy="96" r="2.5" fill="currentColor"></circle>
+  <circle cx="82" cy="114" r="3" fill="currentColor"></circle>
+</svg>

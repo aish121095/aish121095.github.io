@@ -1,0 +1,152 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ─── Theme tokens (carried over unchanged from the original site) ─────────── */
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-sm: 0px 2px 0px 0px hsl(339 40% 90% / 0.5), 0px 1px 2px -1px hsl(339 40% 90% / 0.5);
+  --shadow-md: 0px 2px 0px 0px hsl(339 40% 90% / 0.5), 0px 2px 4px -1px hsl(339 40% 90% / 0.5);
+  --shadow-lg: 0px 2px 0px 0px hsl(339 40% 90% / 0.5), 0px 4px 6px -1px hsl(339 40% 90% / 0.5);
+  --shadow-xl: 0px 2px 0px 0px hsl(339 40% 90% / 0.5), 0px 8px 10px -1px hsl(339 40% 90% / 0.5);
+}
+
+:root {
+  --background: 350 100% 99%;
+  --foreground: 340 12% 27%;
+  --primary: 339 50% 65%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 339 60% 91%;
+  --secondary-foreground: 339 20% 35%;
+  --muted: 339 40% 95%;
+  --muted-foreground: 339 15% 50%;
+  --accent: 40 50% 54%;
+  --accent-foreground: 0 0% 100%;
+  --card: 0 0% 100%;
+  --border: 339 30% 88%;
+  --ring: 339 50% 65%;
+  --radius: 0.5rem;
+  color-scheme: light;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground overflow-x-hidden;
+    background-image: radial-gradient(circle, hsl(var(--primary) / 0.055) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .gold-divider {
+    @apply h-1 w-24 bg-gradient-to-r from-accent to-primary rounded-full mt-4 mb-8;
+  }
+
+  .lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .lift:hover {
+    transform: translateY(-8px);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: hsl(var(--secondary) / 0.5); }
+::-webkit-scrollbar-thumb { background: hsl(var(--primary)); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.8); }
+
+/* ─── Motion ──────────────────────────────────────────────────────────────── */
+
+/* Cross-page fade (replaces the old framer-motion page transition) */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: page-out 0.25s ease-out both; }
+::view-transition-new(root) { animation: page-in 0.35s ease-out both; }
+@keyframes page-out { to { opacity: 0; transform: translateY(-18px); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(18px); } }
+
+/* Scroll-reveal: only hidden once JS has confirmed it can reveal them */
+.js [data-reveal] {
+  opacity: 0;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition-delay: var(--delay, 0s);
+}
+.js [data-reveal="up"] { transform: translateY(40px); }
+.js [data-reveal="up-sm"] { transform: translateY(20px); }
+.js [data-reveal="left"] { transform: translateX(-20px); }
+.js [data-reveal="right"] { transform: translateX(20px); }
+.js [data-reveal="zoom"] { transform: scale(0.94); }
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+.mandala-spin { animation: mandala-spin 40s linear infinite; }
+@keyframes mandala-spin { to { rotate: 360deg; } }
+
+.logo-mandala { transition: rotate 1.4s ease-in-out; }
+.logo-link:hover .logo-mandala { rotate: 360deg; }
+
+.caret { animation: caret-blink 0.9s steps(1) infinite; }
+@keyframes caret-blink { 50% { opacity: 0; } }
+
+/* ECG trace used on the 404 page */
+.ecg-trace {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: ecg-draw 3.2s ease-in-out infinite;
+}
+@keyframes ecg-draw {
+  0% { stroke-dashoffset: 1200; }
+  60% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -1200; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .mandala-spin, .caret, .ecg-trace { animation: none; }
+  .ecg-trace { stroke-dashoffset: 0; }
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .lift:hover { transform: none; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}

@@ -1,0 +1,95 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import JaliBorder from "@/components/JaliBorder.astro";
+import { getSite } from "@/lib/content";
+
+const site = await getSite();
+const tagline = site.roles.join(" • ");
+// Split "Dr. R. Aishwariya" so the last word carries the accent colour.
+const nameParts = site.name.trim().split(" ");
+const lastName = nameParts.pop();
+const firstNames = nameParts.join(" ");
+---
+
+<BaseLayout>
+  <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 flex items-center min-h-[90vh] overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-secondary/50 via-background to-background -z-10"></div>
+    <MandalaMotif style="top:-140px;right:-140px;width:580px;height:580px;opacity:0.07" />
+    <MandalaMotif style="bottom:-180px;left:-120px;width:400px;height:400px;opacity:0.045" />
+    <PaisleyMotif class="text-primary" style="bottom:12%;right:8%;width:80px;height:130px;opacity:0.07" />
+    <PaisleyMotif class="text-accent" style="bottom:8%;right:14%;width:60px;height:98px;opacity:0.055;transform:scaleX(-1) rotate(10deg)" />
+
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl">
+        {
+          site.credentials && (
+            <div class="mb-4" data-reveal="up">
+              <span class="inline-block py-1 px-3 rounded-full bg-secondary text-primary text-sm font-medium mb-4">
+                {site.credentials}
+              </span>
+            </div>
+          )
+        }
+        <h1
+          class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-foreground leading-tight mb-6"
+          data-reveal="up"
+          style="--delay:0.1s"
+        >
+          {firstNames} <span class="text-primary">{lastName}</span>
+        </h1>
+        <p
+          class="text-xl md:text-2xl text-muted-foreground mb-10 font-light leading-relaxed max-w-3xl min-h-[2.5rem]"
+          data-reveal="up"
+          style="--delay:0.2s"
+        >
+          <span class="sr-only">{tagline}</span>
+          <span id="typewriter" data-text={tagline} aria-hidden="true"></span><span
+            class="inline-block ml-0.5 text-primary font-normal caret"
+            aria-hidden="true">|</span
+          >
+          <noscript><span aria-hidden="true">{tagline}</span></noscript>
+        </p>
+        <div class="flex flex-wrap gap-4" data-reveal="up" style="--delay:0.3s">
+          <a
+            href={site.heroPrimaryLink}
+            class="inline-flex items-center justify-center h-10 px-8 rounded-full bg-primary hover:bg-primary/90 text-white font-medium transition-colors"
+          >
+            {site.heroPrimaryLabel}
+          </a>
+          {
+            site.cv && (
+              <a
+                href={site.cv}
+                download
+                class="inline-flex items-center justify-center h-10 px-8 rounded-full border border-accent text-accent hover:bg-accent hover:text-white font-medium transition-colors"
+              >
+                {site.cvLabel}
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+  <JaliBorder id="hero-bottom" class="text-primary/25" />
+</BaseLayout>
+
+<script>
+  const el = document.getElementById("typewriter");
+  const text = el?.dataset.text ?? "";
+  if (el) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.textContent = text;
+    } else {
+      let i = 0;
+      setTimeout(() => {
+        const timer = setInterval(() => {
+          el.textContent = text.slice(0, ++i);
+          if (i >= text.length) clearInterval(timer);
+        }, 36);
+      }, 800);
+    }
+  }
+</script>

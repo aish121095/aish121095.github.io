@@ -1,0 +1,105 @@
+---
+import { render } from "astro:content";
+import Award from "@lucide/astro/icons/award";
+import BadgeCheck from "@lucide/astro/icons/badge-check";
+import BookOpen from "@lucide/astro/icons/book-open";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import JaliBorder from "@/components/JaliBorder.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { getAwards, getEducation } from "@/lib/content";
+
+const degrees = await Promise.all(
+  (await getEducation()).map(async (entry) => ({
+    ...entry.data,
+    id: entry.id,
+    hasBody: Boolean(entry.body?.trim()),
+    Content: (await render(entry)).Content,
+  })),
+);
+const allAwards = await getAwards();
+const categoryIcon = { Award, Certification: BadgeCheck, Training: BookOpen } as const;
+const groups = [
+  { title: "Awards & Achievements", items: allAwards.filter((a) => a.data.category === "Award") },
+  { title: "Courses & Certifications", items: allAwards.filter((a) => a.data.category !== "Award") },
+].filter((g) => g.items.length > 0);
+---
+
+<BaseLayout title="Education" description="Academic qualifications in public health and dental surgery, with awards and professional certifications.">
+  <section class="pt-32 pb-20 bg-white relative overflow-hidden min-h-screen">
+    <MandalaMotif spin style="top:50%;left:50%;width:580px;height:580px;opacity:0.055;transform:translate(-50%,-50%)" />
+    <MandalaMotif style="bottom:-80px;right:-80px;width:280px;height:280px;opacity:0.055" />
+    <PaisleyMotif class="text-accent" style="top:10%;left:1%;width:48px;height:78px;opacity:0.055;transform:rotate(-25deg)" />
+    <div class="container mx-auto px-6 relative z-10">
+      <SectionHeading title="Education" />
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16" role="list">
+        {
+          degrees.map((deg, i) => (
+            <li data-reveal="up-sm" style={`--delay:${i * 0.1}s`}>
+              <div class="lift h-full p-8 rounded-2xl bg-secondary/30 border border-secondary hover:border-primary/30">
+                <h2 class="text-2xl font-serif font-bold text-foreground mb-2">{deg.degree}</h2>
+                <p class="text-lg text-accent font-medium">{deg.institution}</p>
+                {(deg.location || deg.period) && (
+                  <p class="text-sm text-muted-foreground mt-1">{[deg.period, deg.location].filter(Boolean).join(" · ")}</p>
+                )}
+                {deg.hasBody && (
+                  <div class="mt-4 prose prose-sm max-w-none text-foreground/80 prose-a:text-primary">
+                    <deg.Content />
+                  </div>
+                )}
+                {deg.honours.length > 0 && (
+                  <ul class="mt-4 flex flex-wrap gap-2" role="list">
+                    {deg.honours.map((honour) => (
+                      <li class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-sm font-medium text-primary shadow-sm">
+                        <Award size={16} class="text-accent shrink-0" aria-hidden="true" />
+                        {honour}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        groups.map((group, g) => (
+          <div class:list={[{ "mb-16": g < groups.length - 1 }]}>
+            <SectionHeading title={group.title} as="h2" />
+            <ul class="flex flex-wrap gap-4" role="list">
+              {group.items.map(({ data }, i) => {
+                const Icon = categoryIcon[data.category];
+                return (
+                  <li
+                    data-reveal="zoom"
+                    style={`--delay:${Math.min(i, 10) * 0.05}s`}
+                    class:list={[
+                      "flex items-start gap-3 px-6 py-3 bg-background border border-secondary text-foreground rounded-lg shadow-sm hover:border-primary hover:shadow-md transition-all",
+                      { "max-w-xl": data.description },
+                    ]}
+                  >
+                    <Icon size={18} class="text-primary shrink-0 mt-0.5" aria-label={data.category} />
+                    <span>
+                      <span class="font-medium">{data.title}</span>
+                      {(data.issuer || data.year) && (
+                        <span class="block text-xs text-muted-foreground">
+                          {[data.issuer, data.year].filter(Boolean).join(" · ")}
+                        </span>
+                      )}
+                      {data.description && (
+                        <span class="block text-sm text-muted-foreground mt-1">{data.description}</span>
+                      )}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+  <JaliBorder id="edu-bottom" class="text-accent/30" />
+</BaseLayout>

@@ -1,0 +1,41 @@
+{
+  "title": "Where Science Meets Art",
+  "subtitle": "Exploring the intersection of clinical precision and classical expression.",
+  "pillars": [
+    {
+      "title": "Bharatanatyam",
+      "body": "As a classical artist, the discipline, rhythm, and storytelling of Bharatanatyam profoundly influence my approach to public health. The dedication required to master this ancient dance form translates into the meticulousness of my research methodology, while its expressive nature fuels my passion for health communication."
+    },
+    {
+      "title": "Creative Direction",
+      "body": "Blending science with visual communication. I believe that powerful research deserves powerful presentation. As a Creative Director at One Public Health, I focus on translating complex epidemiological data and health policies into accessible, engaging narratives that drive real-world impact."
+    }
+  ],
+  "quote": "Research gives me purpose. Bharatanatyam gives me expression.",
+  "galleries": [
+    {
+      "title": "On Stage",
+      "layout": "masonry",
+      "images": [
+        { "src": "/uploads/gallery/bharatanatyam-performance.jpg", "alt": "Bharatanatyam performance" },
+        { "src": "/uploads/gallery/solo-performance.jpeg", "alt": "Solo performance" },
+        { "src": "/uploads/gallery/group-performance-stage.jpg", "alt": "Group performance on stage" },
+        { "src": "/uploads/gallery/art-gallery-performance.jpeg", "alt": "Performance at art gallery" },
+        { "src": "/uploads/gallery/group-bharatanatyam.jpg", "alt": "Group Bharatanatyam" },
+        { "src": "/uploads/gallery/kartavya-bhavan-pose.jpeg", "alt": "Dance pose at Kartavya Bhavan" },
+        { "src": "/uploads/gallery/kartavya-bhavan-dance.jpeg", "alt": "Dance at Kartavya Bhavan" }
+      ]
+    },
+    {
+      "title": "Journeys",
+      "caption": "Exploring the world, one culture at a time — Japan, 2025",
+      "layout": "grid",
+      "images": [
+        { "src": "/uploads/gallery/kyoto-kiyomizudera.jpeg", "alt": "Kimono at Kiyomizudera, Kyoto" },
+        { "src": "/uploads/gallery/tokyo-meiji-shrine.jpeg", "alt": "Meiji Shrine, Tokyo" },
+        { "src": "/uploads/gallery/osaka-shrine-market.jpeg", "alt": "Osaka shrine market" },
+        { "src": "/uploads/gallery/osaka-2025.jpeg", "alt": "Osaka 2025" }
+      ]
+    }
+  ]
+}

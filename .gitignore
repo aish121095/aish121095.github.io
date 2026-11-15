@@ -1,14 +1,17 @@
+# dependencies & build output
 node_modules
 dist
-.tsbuildinfo
-.DS_Store
-.vite
-*.log
+.astro
 
-# Unused Replit attachments — not imported by the app
-attached_assets/12_1781672781666.mp4
-attached_assets/1_1781672781666.HEIC
-attached_assets/profile_nobg.png
-attached_assets/Screenshot_2026-06-21_at_1.17.15_PM_1782028044026.png
-attached_assets/Dr_R_Aishwariya_resume_1781671890801.pdf
-attached_assets/Pasted--*.txt
+# TinaCMS — generated on every build (tina/tina-lock.json IS committed)
+tina/__generated__
+public/admin
+
+# environment
+.env
+.env.*
+
+# misc
+.DS_Store
+*.log
+.tsbuildinfo

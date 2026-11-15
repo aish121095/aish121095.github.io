@@ -1,0 +1,47 @@
+---
+// Icons an editor can pick for a research interest in the CMS.
+import Apple from "@lucide/astro/icons/apple";
+import Baby from "@lucide/astro/icons/baby";
+import BookOpen from "@lucide/astro/icons/book-open";
+import Brain from "@lucide/astro/icons/brain";
+import FlaskConical from "@lucide/astro/icons/flask-conical";
+import Globe from "@lucide/astro/icons/globe";
+import HeartPulse from "@lucide/astro/icons/heart-pulse";
+import Hospital from "@lucide/astro/icons/hospital";
+import Leaf from "@lucide/astro/icons/leaf";
+import Microscope from "@lucide/astro/icons/microscope";
+import Monitor from "@lucide/astro/icons/monitor";
+import ShieldPlus from "@lucide/astro/icons/shield-plus";
+import Stethoscope from "@lucide/astro/icons/stethoscope";
+import Syringe from "@lucide/astro/icons/syringe";
+import TrendingUp from "@lucide/astro/icons/trending-up";
+import Users from "@lucide/astro/icons/users";
+
+const icons = {
+  apple: Apple,
+  baby: Baby,
+  "book-open": BookOpen,
+  brain: Brain,
+  "flask-conical": FlaskConical,
+  globe: Globe,
+  "heart-pulse": HeartPulse,
+  hospital: Hospital,
+  leaf: Leaf,
+  microscope: Microscope,
+  monitor: Monitor,
+  "shield-plus": ShieldPlus,
+  stethoscope: Stethoscope,
+  syringe: Syringe,
+  "trending-up": TrendingUp,
+  users: Users,
+} as const;
+
+interface Props {
+  name: string;
+  class?: string;
+}
+const { name, class: className = "w-8 h-8" } = Astro.props;
+const Icon = icons[name as keyof typeof icons] ?? Microscope;
+---
+
+<Icon class={className} aria-hidden="true" />

@@ -1,0 +1,70 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import JaliBorder from "@/components/JaliBorder.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { getExperience, formatPeriod } from "@/lib/content";
+
+const jobs = await Promise.all(
+  (await getExperience()).map(async (entry) => ({
+    ...entry.data,
+    id: entry.id,
+    period: formatPeriod(entry.data),
+    hasBody: Boolean(entry.body?.trim()),
+    Content: (await render(entry)).Content,
+  })),
+);
+---
+
+<BaseLayout title="Experience" description="Professional experience in public health research, policy and scientific publishing.">
+  <section class="pt-32 pb-20 bg-background relative overflow-hidden min-h-screen">
+    <MandalaMotif spin style="top:50%;left:50%;width:600px;height:600px;opacity:0.055;transform:translate(-50%,-50%)" />
+    <MandalaMotif style="top:-100px;right:-100px;width:320px;height:320px;opacity:0.055" />
+    <PaisleyMotif class="text-primary" style="bottom:5%;left:2%;width:50px;height:80px;opacity:0.055;transform:rotate(30deg)" />
+    <div class="container mx-auto px-6 relative z-10">
+      <SectionHeading title="Experience" />
+      <div class="max-w-4xl mx-auto">
+        <ol class="relative border-l-2 border-secondary pl-8 ml-4 space-y-12">
+          {
+            jobs.map((job, i) => (
+              <li class="relative" data-reveal="left" style={`--delay:${i * 0.1}s`}>
+                <span
+                  class:list={[
+                    "absolute w-4 h-4 rounded-full -left-[41px] top-1.5 border-4 border-background",
+                    job.current ? "bg-primary ring-4 ring-primary/20" : "bg-primary",
+                  ]}
+                  aria-hidden="true"
+                />
+                <h2 class="text-xl font-semibold font-sans text-foreground">{job.role}</h2>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 mt-1">
+                  <span class="text-lg font-serif text-accent">{job.organization}</span>
+                  {job.period && (
+                    <>
+                      <span class="hidden sm:inline text-muted-foreground" aria-hidden="true">•</span>
+                      <span class="text-sm text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded-full w-fit">
+                        {job.period}
+                      </span>
+                    </>
+                  )}
+                </div>
+                {(job.location || job.employmentType) && (
+                  <p class="mt-2 text-sm text-muted-foreground">
+                    {[job.employmentType, job.location].filter(Boolean).join(" · ")}
+                  </p>
+                )}
+                {job.hasBody && (
+                  <div class="mt-3 prose prose-sm max-w-none text-foreground/80 prose-li:marker:text-primary prose-a:text-primary">
+                    <job.Content />
+                  </div>
+                )}
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+  <JaliBorder id="exp-bottom" class="text-primary/25" />
+</BaseLayout>

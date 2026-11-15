@@ -1,0 +1,27 @@
+---
+import { getImage } from "astro:assets";
+import mandala from "@/assets/theme/mandala.png";
+
+interface Props {
+  class?: string;
+  style?: string;
+  spin?: boolean;
+}
+
+const { class: className = "", style = "", spin = false } = Astro.props;
+// One optimised copy is shared by every motif on the site.
+const img = await getImage({ src: mandala, width: 900, format: "webp" });
+---
+
+<div class:list={["absolute pointer-events-none select-none", className]} style={style} aria-hidden="true">
+  <img
+    src={img.src}
+    alt=""
+    width={img.attributes.width}
+    height={img.attributes.height}
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+    class:list={["w-full h-full object-contain mix-blend-multiply", { "mandala-spin": spin }]}
+  />
+</div>

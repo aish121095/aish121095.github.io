@@ -1,0 +1,74 @@
+---
+import Mail from "@lucide/astro/icons/mail";
+import Phone from "@lucide/astro/icons/phone";
+import MapPin from "@lucide/astro/icons/map-pin";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import LinkedInIcon from "@/components/LinkedInIcon.astro";
+import { getSite } from "@/lib/content";
+
+const { contact } = await getSite();
+
+const linkedinHandle = contact.linkedin?.replace(/^https?:\/\/(www\.)?linkedin\.com\//i, "").replace(/\/$/, "");
+const items = [
+  contact.email && { icon: Mail, label: "Email", value: contact.email, href: `mailto:${contact.email}` },
+  contact.phone && { icon: Phone, label: "Phone", value: contact.phone, href: `tel:${contact.phone.replace(/[^\d+]/g, "")}` },
+  contact.linkedin && { icon: LinkedInIcon, label: "LinkedIn", value: linkedinHandle, href: contact.linkedin },
+  contact.location && { icon: MapPin, label: "Location", value: contact.location },
+].filter(Boolean) as { icon: any; label: string; value: string; href?: string }[];
+---
+
+<BaseLayout title="Contact" description={contact.intro}>
+  <section class="pt-32 pb-20 bg-primary text-primary-foreground relative overflow-hidden min-h-screen">
+    <MandalaMotif spin style="top:50%;left:50%;width:640px;height:640px;opacity:0.09;transform:translate(-50%,-50%)" />
+    <MandalaMotif style="bottom:-120px;left:-120px;width:380px;height:380px;opacity:0.1" />
+    <PaisleyMotif class="text-white" style="top:10%;right:3%;width:55px;height:90px;opacity:0.09;transform:rotate(-15deg)" />
+    <PaisleyMotif class="text-white" style="top:5%;right:9%;width:40px;height:65px;opacity:0.07;transform:scaleX(-1) rotate(-5deg)" />
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-4xl mx-auto text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-6">{contact.heading}</h1>
+        {contact.intro && <p class="text-primary-foreground/80 text-lg max-w-2xl mx-auto">{contact.intro}</p>}
+      </div>
+      <ul
+        role="list"
+        class:list={[
+          "grid grid-cols-1 sm:grid-cols-2 gap-8",
+          { 2: "md:grid-cols-2", 3: "md:grid-cols-3" }[items.length] ?? (items.length >= 4 ? "md:grid-cols-4" : ""),
+        ]}
+      >
+        {
+          items.map((item, i) => {
+            const Tag = item.href ? "a" : "div";
+            const external = item.href?.startsWith("http");
+            return (
+              <li data-reveal="up-sm" style={`--delay:${i * 0.1}s`}>
+                <Tag
+                  href={item.href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  class="h-full flex flex-col items-center text-center p-6 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors"
+                >
+                  <span class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-4 text-white">
+                    <item.icon class="w-6 h-6" aria-hidden="true" />
+                  </span>
+                  <span class="text-sm font-medium text-white/70 mb-1">{item.label}</span>
+                  <span class="text-base font-semibold [overflow-wrap:anywhere]">
+                    {item.value.includes("@") ? (
+                      <>
+                        {item.value.split("@")[0]}
+                        <wbr />@{item.value.split("@").slice(1).join("@")}
+                      </>
+                    ) : (
+                      item.value
+                    )}
+                  </span>
+                </Tag>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

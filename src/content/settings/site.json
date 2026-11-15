@@ -1,0 +1,31 @@
+{
+  "name": "Dr. R. Aishwariya",
+  "shortName": "Dr R Aishwariya",
+  "credentials": "BDS • MPH",
+  "jobTitle": "Public Health Researcher and Dentist",
+  "roles": [
+    "Public Health Researcher",
+    "Dentist",
+    "Scientific Writer",
+    "Creative Director",
+    "Bharatanatyam Artist"
+  ],
+  "seoDescription": "Dr. R. Aishwariya (BDS, MPH) is a public health researcher and dentist working in tobacco control, digital health, nutrition and implementation research, with projects funded by WHO, UNICEF, ICMR and the Ministry of Health & Family Welfare.",
+  "heroPrimaryLabel": "Explore",
+  "heroPrimaryLink": "/about",
+  "cvLabel": "Download CV",
+  "cv": "/uploads/documents/Dr_R_Aishwariya_CV.pdf",
+  "footerMotto": "Where Science Meets Art",
+  "contact": {
+    "heading": "Get in Touch",
+    "intro": "Open to collaborations, research partnerships, and creative projects in the public health space.",
+    "email": "dr.r.aishwariya@gmail.com",
+    "phone": "+91 85473 21882",
+    "linkedin": "https://linkedin.com/in/dr-r-aishwariya",
+    "location": "New Delhi, India"
+  },
+  "notFound": {
+    "heading": "This page could not be located",
+    "message": "The link may be outdated, or the page may have moved during a recent update. Nothing is wrong on your side — the sections below will help you find what you were looking for."
+  }
+}

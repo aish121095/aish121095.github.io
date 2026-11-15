@@ -1,0 +1,97 @@
+---
+import { render } from "astro:content";
+import ExternalLink from "@lucide/astro/icons/external-link";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MandalaMotif from "@/components/MandalaMotif.astro";
+import PaisleyMotif from "@/components/PaisleyMotif.astro";
+import JaliBorder from "@/components/JaliBorder.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { getPublications, publicationHref } from "@/lib/content";
+
+const pubs = await Promise.all(
+  (await getPublications()).map(async (entry) => ({
+    ...entry.data,
+    id: entry.id,
+    href: publicationHref(entry.data.url),
+    hasBody: Boolean(entry.body?.trim()),
+    Content: (await render(entry)).Content,
+  })),
+);
+---
+
+<BaseLayout
+  title="Publications"
+  description="Peer-reviewed articles, white papers and reports in public health, tobacco control, adolescent health and infectious disease epidemiology."
+>
+  <section class="pt-32 pb-20 bg-background relative overflow-hidden min-h-screen">
+    <MandalaMotif spin style="top:50%;left:50%;width:620px;height:620px;opacity:0.055;transform:translate(-50%,-50%)" />
+    <MandalaMotif style="top:50%;right:-150px;width:420px;height:420px;opacity:0.055;transform:translateY(-50%)" />
+    <PaisleyMotif class="text-primary" style="bottom:8%;left:1%;width:52px;height:84px;opacity:0.055;transform:rotate(15deg)" />
+    <div class="container mx-auto px-6 relative z-10">
+      <SectionHeading title="Selected Publications" />
+      <ol class="grid grid-cols-1 gap-6 max-w-4xl" role="list">
+        {
+          pubs.map((pub, i) => (
+            <li data-reveal="right" style={`--delay:${Math.min(i, 8) * 0.1}s`}>
+              <article
+                class:list={[
+                  "p-6 bg-white rounded-xl shadow-sm border-l-4 hover:border-primary transition-colors duration-300 group",
+                  pub.featured ? "border-primary" : "border-accent",
+                ]}
+              >
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="text-xs font-medium uppercase tracking-wider text-primary bg-secondary/60 px-2.5 py-0.5 rounded-full">
+                    {pub.type}
+                  </span>
+                  {pub.featured && (
+                    <span class="text-xs font-medium uppercase tracking-wider text-accent border border-accent/40 px-2.5 py-0.5 rounded-full">
+                      Highlighted
+                    </span>
+                  )}
+                </div>
+                <h2 class="text-xl font-serif font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                  {pub.href ? (
+                    <a
+                      href={pub.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="underline decoration-primary/30 underline-offset-4 hover:decoration-primary"
+                    >
+                      “{pub.title}”
+                    </a>
+                  ) : (
+                    <>“{pub.title}”</>
+                  )}
+                </h2>
+                {pub.authors && <p class="text-sm text-foreground/70 mb-1">{pub.authors}</p>}
+                <p class="text-muted-foreground text-sm">
+                  {pub.venue && <span class="font-medium italic">{pub.venue}</span>}
+                  {pub.venue && <span aria-hidden="true">&nbsp;•&nbsp;</span>}
+                  <span class="whitespace-nowrap">{pub.year}</span>
+                </p>
+                {pub.hasBody && (
+                  <div class="mt-3 prose prose-sm max-w-none text-foreground/80 prose-a:text-primary">
+                    <pub.Content />
+                  </div>
+                )}
+                {pub.href && (
+                  <a
+                    href={pub.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline underline-offset-4"
+                  >
+                    Read publication
+                    <ExternalLink size={14} aria-hidden="true" />
+                    <span class="sr-only">(opens in a new tab)</span>
+                  </a>
+                )}
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+  <JaliBorder id="pub-bottom" class="text-primary/25" />
+</BaseLayout>
