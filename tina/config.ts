@@ -224,7 +224,7 @@ const publications: Collection = {
       type: "string",
       name: "type",
       label: "Publication type",
-      options: ["Journal article", "Review article", "White paper", "Policy brief", "Report", "Conference abstract", "Book chapter", "Preprint"],
+      options: ["Journal article", "Review article", "Opinion editorial", "White paper", "Policy brief", "Report", "Conference abstract", "Book chapter", "Preprint"],
     },
     { type: "string", name: "url", label: "Link (DOI or URL)", description: "e.g. https://doi.org/10.7759/cureus.12345" },
     { type: "boolean", name: "featured", label: "Highlight this publication" },
